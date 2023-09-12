@@ -1,0 +1,139 @@
+PROJECT 1 : Weather Forecast
+
+Problem Statement:
+You are tasked with creating a simple weather forecast application. The HTML and CSS for the application have been provided to you, and your job is to write the JavaScript code to fetch weather data from an open weather API and display it on the webpage.
+
+ 
+const apiKey = '428fd3a865efa58749c9eb877fb7c986';
+function fetchWeatherData() {
+    const weatherContainer = document.querySelector('.weather-data');
+    const loadingMessage = document.createElement('p');
+    loadingMessage.textContent = 'Loading...';
+    weatherContainer.innerHTML = '';
+    weatherContainer.appendChild(loadingMessage);
+    const city = 'Nandyal';
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+    fetch(apiUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const temperature = (data.main.temp - 273.15).toFixed(2);
+            const description = data.weather[0].description;
+            const cityName = data.name;
+            
+            const weatherInfo = document.createElement('p');
+            weatherInfo.textContent = `Weather in ${cityName}: ${description}, Temperature: ${temperature}°C`;
+
+            weatherContainer.innerHTML = '';
+            weatherContainer.appendChild(weatherInfo);
+        })
+        .catch((error) => {
+            console.error('There was a problem fetching the weather data:', error);
+            weatherContainer.innerHTML = 'Failed to fetch weather data.';
+        });
+}
+
+window.addEventListener('load', fetchWeatherData);
+
+
+
+PROJECT 2 : Random Quote Generator
+
+Problem Statement:
+You have been assigned the task of building a random quote generator. The HTML and CSS have been provided, and you need to write the JavaScript code to fetch a random quote from a quotes API and display it on the webpage. 
+function fetchRandomQuote() {
+    const quoteContainer = document.querySelector('.quote');
+    const loadingMessage = document.createElement('p');
+    loadingMessage.textContent = 'Loading...';
+    quoteContainer.innerHTML = '';
+    quoteContainer.appendChild(loadingMessage);
+
+    const apiUrl = 'https://type.fit/api/quotes';
+
+    fetch(apiUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const randomIndex = Math.floor(Math.random() * data.length);
+            const randomQuote = data[randomIndex];
+            
+            const quoteText = randomQuote.text;
+            const quoteAuthor = randomQuote.author || 'Unknown';
+
+            const quoteInfo = document.createElement('p');
+            quoteInfo.innerHTML = `"${quoteText}"<br> - ${quoteAuthor}`;
+
+            quoteContainer.innerHTML = '';
+            quoteContainer.appendChild(quoteInfo);
+        })
+        .catch((error) => {
+            console.error('There was a problem fetching the random quote:', error);
+            quoteContainer.innerHTML = 'Failed to fetch a quote.';
+        });
+}
+
+
+const newQuoteButton = document.getElementById('new-quote-btn');
+newQuoteButton.addEventListener('click', fetchRandomQuote);
+
+window.addEventListener('load', fetchRandomQuote);
+
+
+PROJECT 3 : Country Information App
+ 
+Problem Statement:
+You are required to build a simple country information app. The HTML and CSS have been provided, and your task is to write the JavaScript code to fetch country data from a countries API and display it on the webpage.
+
+
+function fetchCountryData() {
+    const countryInfoContainer = document.querySelector('.country-info');
+    const loadingMessage = document.createElement('p');
+    loadingMessage.textContent = 'Loading...';
+    countryInfoContainer.innerHTML = '';
+    countryInfoContainer.appendChild(loadingMessage);
+
+    const countryCode = 'ISO 3166-1 alpha-2';
+    const apiUrl = `https://restcountries.com/v3.1/alpha?codes=${countryCode}`;
+
+    fetch(apiUrl)
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            const country = data[0];
+            const countryName = country.name.common;
+            const capital = country.capital[0];
+            const population = country.population.toLocaleString();
+            const region = country.region;
+            const subregion = country.subregion;
+            
+            const countryInfoText = `
+                <h2>${countryName}</h2>
+                <p><strong>Capital:</strong> ${capital}</p>
+                <p><strong>Population:</strong> ${population}</p>
+                <p><strong>Region:</strong> ${region}</p>
+                <p><strong>Subregion:</strong> ${subregion}</p>
+            `;
+
+            countryInfoContainer.innerHTML = '';
+            countryInfoContainer.innerHTML = countryInfoText;
+        })
+        .catch((error) => {
+            console.error('There was a problem fetching country data:', error);
+            countryInfoContainer.innerHTML = 'Failed to fetch country data.';
+        });
+}
+
+window.addEventListener('load', fetchCountryData);
